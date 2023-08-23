@@ -3728,7 +3728,7 @@ class DXXCommon(LazyObjectConstructor):
 						'cross-compile to specified platform',
 						{
 							'map': {'msys':'win32'},
-							'allowed_values' : ('darwin', 'linux', 'freebsd', 'openbsd', 'win32', 'haiku1'),
+							'allowed_values' : ('darwin', 'linux', 'freebsd', 'openbsd', 'win32', 'haiku1', 'freemint'),
 							}
 						),
 					('raspberrypi', None, 'build for Raspberry Pi (automatically selects opengles)', {'ignorecase': 2, 'map': {'1':'yes', 'true':'yes', '0':'no', 'false':'no'}, 'allowed_values': ('yes', 'no', 'mesa')}),
@@ -4154,6 +4154,17 @@ class DXXCommon(LazyObjectConstructor):
 				LIBS = ['network'],
 			)
 
+	# Settings to apply to FreeMiNT builds
+	class FreemintPlatformSettings(_PlatformSettings):
+		sharepath = '{prefix}/share/games/{program_target}'.format
+		@staticmethod
+		def get_platform_objects(_empty=()):
+			return _empty
+		def adjust_environment(self,program,env):
+			env.Append(
+				CXXFLAGS = ['-m68020-60', '-fomit-frame-pointer', '-D__STDC_LIMIT_MACROS', '-Wno-error=format-truncation'],
+			)
+
 	def __init__(self,user_settings,__program_instance=itertools.count(1)):
 		self.program_instance = next(__program_instance)
 		self.user_settings = user_settings
@@ -4572,6 +4583,7 @@ class DXXCommon(LazyObjectConstructor):
 			cls.Win32PlatformSettings if platform_name == 'win32' else (
 				cls.DarwinPlatformSettings if platform_name == 'darwin' else
 				cls.HaikuPlatformSettings if platform_name == 'haiku1' else
+				cls.FreemintPlatformSettings if platform_name == 'freemint' else
 				cls.LinuxPlatformSettings
 			)
 		)
