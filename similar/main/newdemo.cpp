@@ -1031,7 +1031,7 @@ static void nd_record_meta(char (&buf)[7], const char *s)
 static void nd_rdt(char (&buf)[7])
 {
 	time_t t;
-	if (time(&t) == static_cast<time_t>(-1))
+	if (time(&t) == -1)
 		return;
 	/* UTC for easy comparison among demos from players in different
 	 * timezones
