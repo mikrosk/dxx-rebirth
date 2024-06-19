@@ -23,6 +23,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
+#pragma GCC optimize "-O1"
+
 #include "dxxsconf.h"
 #include <bitset>
 #include <new>
